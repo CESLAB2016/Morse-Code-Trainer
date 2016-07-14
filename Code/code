@@ -1,0 +1,366 @@
+#include <PS2Keyboard.h>
+const int DataPin = 8;
+const int IRQpin = 2;
+static int CurrentMode=1 ;
+static String Cache = "";
+PS2Keyboard keyboard;
+#define PS2_PAGEUP      25
+#define PS2_PAGEDOWN    26
+
+
+
+
+void setup() {
+  
+  delay(1000);
+  keyboard.begin(DataPin, IRQpin);
+  Serial.begin(9600);
+  SayHello();
+
+}
+
+
+void loop() {
+  if (keyboard.available()) {
+    char c = keyboard.read();
+    Serial.write(c);
+    if (c == PS2_PAGEUP || c == PS2_PAGEDOWN)
+    {
+      
+      if (c == PS2_PAGEUP)
+      {
+        if (CurrentMode == 1)
+        {
+          CurrentMode = 2;
+          tone(4, 100, 200);
+          tone(4, 100, 200);
+
+        }
+        else if (CurrentMode == 2)
+        {
+          CurrentMode = 3;
+          tone(4, 100, 200);
+          tone(4, 100, 200);
+          tone(4, 100, 200);
+
+        }
+        else if (CurrentMode == 3)
+        {
+          CurrentMode = 1;
+          tone(4, 100, 200);
+
+        }
+      }
+      else
+      {
+        if (CurrentMode == 1)
+        {
+          CurrentMode = 3;
+          tone(4, 100, 200);
+          tone(4, 100, 200);
+          tone(4, 100, 200);
+          
+
+        }
+        else if (CurrentMode == 2)
+        {
+          CurrentMode = 1;
+          tone(4, 100, 200);
+          
+
+        }
+        else if (CurrentMode == 3)
+        {
+          CurrentMode = 2;
+          tone(4, 100, 200);
+          tone(4, 100, 200);
+
+        }
+      }
+      
+      return;
+    }
+
+    KeyPress(c);
+  }
+
+  if (Serial.available() != 0) {
+    char c = Serial.read();
+    Serial.write(c);
+
+    if (c == PS2_PAGEUP || c == PS2_PAGEDOWN)
+    {
+      
+      if (c == PS2_PAGEUP)
+      {
+        if (CurrentMode = 1)
+        {
+          CurrentMode = 2;
+          tone(4, 100, 200);
+          tone(4, 100, 200);
+
+        }
+        else if (CurrentMode = 2)
+        {
+          CurrentMode = 3;
+          tone(4, 100, 200);
+          tone(4, 100, 200);
+          tone(4, 100, 200);
+
+        }
+        else if (CurrentMode = 3)
+        {
+          CurrentMode = 1;
+          tone(4, 100, 200);
+
+        }
+      }
+      else
+      {
+        if (CurrentMode = 1)
+        {
+          CurrentMode = 3;
+          tone(4, 100, 200);
+          tone(4, 100, 200);
+          tone(4, 100, 200);
+
+        }
+        else if (CurrentMode = 2)
+        {
+          CurrentMode = 1;
+          tone(4, 100, 200);
+
+        }
+        else if (CurrentMode = 3)
+        {
+          CurrentMode = 2;
+          tone(4, 100, 200);
+          tone(4, 100, 200);
+
+        }
+      }
+      
+      return;
+    }
+
+    KeyPress(c);
+  }
+
+}
+
+
+void KeyPress(char c)
+{
+  if (CurrentMode == 1)
+  {
+    SendTone(c);
+
+  }
+  if (CurrentMode == 2)
+  {
+    if (c == ' ')
+    {
+      for (int i = 0; i < Cache.length(); i++)
+      {
+        SendTone(Cache[i]);
+      }
+      SendTone(c);
+      Cache = "";
+
+    }
+    else {
+      Cache = Cache + c;
+
+    }
+  }
+  if (CurrentMode == 3)
+  {
+    if (c == PS2_ENTER)
+    {
+      for (int i = 0; i < Cache.length(); i++)
+      {
+        SendTone(Cache[i]);
+      }
+      //SendTone(c);
+      Cache = "";
+    }
+    else {
+      Cache = Cache + c;
+
+    }
+  }
+}
+
+
+
+void SayHello()
+{
+  SendTone('h');
+  SendTone('e');
+  SendTone('l');
+  SendTone('l');
+  SendTone('o');
+}
+
+void SendTone( char c)
+{
+  c=tolower(c);
+  switch (c)
+  {
+    case 'a':
+      p(1); l(1);
+      break;
+    case 'b':
+      l(1); p(3);
+      break;
+    case 'c':
+      l(1); p(1); l(1); p(1);
+      break;
+    case 'd':
+      l(1); p(2);
+      break;
+    case 'e':
+      p(1);
+      break;
+    case 'f':
+      p(2); l(1); p(1);
+      break;
+    case 'g':
+      l(2); p(1);
+      break;
+    case 'h':
+      p(4);
+      break;
+    case 'i':
+      p(2);
+      break;
+    case 'j':
+      p(1); l(3);
+      break;
+    case 'k':
+      l(1); p(1); l(1);
+      break;
+    case 'l':
+      p(1); l(1); p(2);
+      break;
+    case 'm':
+      l(2);
+      break;
+    case 'n':
+      l(1); p(1);
+      break;
+    case 'o':
+      l(3);
+      break;
+    case 'p':
+      p(1); l(2); p(1);
+      break;
+    case 'q':
+      l(2); p(1); l(1);
+      break;
+    case 'r':
+      p(1); l(1); p(1);
+      break;
+    case 's':
+      p(3);
+      break;
+    case 't':
+      l(1);
+      break;
+    case 'u':
+      p(2); l(1);
+      break;
+    case 'v':
+      p(3);  l(1);
+      break;
+    case 'w':
+      p(1); l(2);
+      break;
+    case 'x':
+      l(1); p(2); l(1);
+      break;
+    case 'y':
+      l(1); p(1); l(2);
+      break;
+    case 'z':
+      l(2); p(2);
+      break;
+    case '1':
+      p(1); l(4);
+      break;
+    case '2':
+      p(2); l(3);
+      break;
+    case '3':
+      p(3);  l(2);
+      break;
+    case '4':
+      p(4);  l(1);
+      break;
+    case '5':
+      p(5);
+      break;
+    case '6':
+      l(1); p(4);
+      break;
+    case '7':
+      l(2); p(3);
+      break;
+    case '8':
+      l(3);  p(2);
+      break;
+    case '9':
+      l(4);  p(1);
+      break;
+    case '0':
+      l(5);
+      break;
+    case ' ':
+      pausa(800);
+      break;
+    case PS2_ENTER:
+      l(6);
+      break;
+    default:
+      tone(4, 300, 550); //error tone
+      break;
+
+  }
+  pausa(200);
+}
+
+void p(int repetetions) { //dot
+  for (int i = 0; i < repetetions; i++)
+  {
+    digitalWrite(13, HIGH);
+    tone(4, 1000);
+    delay(66);
+    digitalWrite(13, LOW);
+    noTone(4);
+    delay(66);
+  }
+}
+void l(int repetetions) { //dash
+  for (int i = 0; i < repetetions; i++)
+  {
+    digitalWrite(13, HIGH);
+    tone(4, 1000);
+    delay(198);
+    digitalWrite(13, LOW);
+    noTone(4);
+    delay(68);
+  }
+}
+void SendHelloMessage()
+{
+  SendTone('h');
+  SendTone('e');
+  SendTone('l');
+  SendTone('l');
+  SendTone('o');
+
+}
+void pausa(int delayLength) { //pause between words for 1000 and letters for 198
+  delay(delayLength);
+}
+
